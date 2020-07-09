@@ -15,12 +15,15 @@
 ## Содержание файла Clients.txt
 
 Пусть имеем следующий граф:
+
 ![](https://github.com/Plugway/Genetic-Algorithm/blob/master/mmedia/graph.png)
 
 Для него можно построить следующую таблицу путей:
+
 ![](https://github.com/Plugway/Genetic-Algorithm/blob/master/mmedia/table.png)
 
 В файл Clients.txt нужно записать только этот участок таблицы:
+
 ![](https://github.com/Plugway/Genetic-Algorithm/blob/master/mmedia/table2.png)
 
 Первое число каждой строки - назначенное время, затем через пробел нужно указать длины путей из таблицы выше. Завершается строка символом ";".

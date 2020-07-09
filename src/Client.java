@@ -1,8 +1,8 @@
 public class Client {
 
-    private int time;
-    private boolean visited;
-    private int employeeNum;
+    private int time;                                                       //Время встречи
+    private boolean visited;                                                //Была ли вершина посещена
+    private int employeeNum;                                                //Номер сотрудника, поситившего вершину
     private int moneyCount;
 
     public void setEmployeeNum(int employeeNum){

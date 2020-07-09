@@ -3,12 +3,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Specimen {
-    public Specimen(String[] chromosomes, int bitInGen){
+    public Specimen(String[] chromosomes, int bitInGen){                    //Конструктор
         this.chromosomes = chromosomes;
         this.bitInGen = bitInGen;
     }
-    private int bitInGen;
-    private String[] chromosomes;
+    private int bitInGen;                                                   //Число битов в 1 гене
+    private String[] chromosomes;                                           //Хромосомы особи
     public int getBitInGen(){
         return bitInGen;
     }
@@ -16,7 +16,7 @@ public class Specimen {
         return chromosomes;
     }
 
-    public static void printSolution(Specimen specimen, String addition){
+    public static void printSolution(Specimen specimen, String addition){   //Печать решения в консоль
         StringBuilder res = new StringBuilder();
         var intChromo = getIntChromosomes(specimen);
         for(var k = 0; k < intChromo.length; k++){
@@ -27,29 +27,29 @@ public class Specimen {
         }
         System.out.print(res.append("\n").append(addition).toString());
     }
-    public static int getFitness(Specimen specimen){
+    public static int getFitness(Specimen specimen){                        //Оценка приспособленности особи
         var intChromos = getIntChromosomes(specimen);
         var fitness = 0;
         for(var k = 0; k < intChromos.length; k++){
-            if (intChromos[k].length > 0 && Employee.list[k].start == intChromos[k][0]){
-                Employee.list[k].multiplier+=Main.employeeMultiplierAdd;
+            if (intChromos[k].length > 0 && Employee.list[k].start == intChromos[k][0]){    //Если нач. или кон. вершина
+                Employee.list[k].multiplier+=Main.employeeMultiplierAdd;                    //совпадает то множитель +
             }
             if (intChromos[k].length > 0 && Employee.list[k].end == intChromos[k][intChromos[k].length-1]){
                 Employee.list[k].multiplier+=Main.employeeMultiplierAdd;
             }
-            var curTime = 0;
-            for (var l = 0; l < intChromos[k].length; l++){
+            var curTime = 0;                                                //Время
+            for (var l = 0; l < intChromos[k].length; l++){                 //Для каждого клиента
                 var money = 0;
                 var client = ClientWeb.getClients()[intChromos[k][l]];
                 if (l > 0)
                     curTime += ClientWeb.getTimesToOther()[intChromos[k][l-1]][intChromos[k][l]];
-                if (curTime <= client.getTime()){
+                if (curTime <= client.getTime()){                           //Если сотрудник не опоздал на встречу
                     money = (int)(Main.salarySetting*Employee.list[k].multiplier);
-                } else {
+                } else {                                                    //иначе
                     money = (int)((Main.salarySetting -
                             curTime + client.getTime())*Employee.list[k].multiplier);
                 }
-                if (!client.getVisited() || client.getMoneyCount() < money){
+                if (!client.getVisited() || client.getMoneyCount() < money){    //если сотрудник получил больше денег чем другой
                     Employee.list[client.getEmployeeNum()].money -= client.getMoneyCount();
                     client.setMoneyCount(money);
                     client.setVisited(true);
@@ -58,12 +58,12 @@ public class Specimen {
                 }
             }
         }
-        for (var i = 0; i < Employee.employeeNum; i++){
+        for (var i = 0; i < Employee.employeeNum; i++){                     //Сброс сотрудников
             fitness += Employee.list[i].money;
             Employee.list[i].money = 0;
             Employee.list[i].multiplier = 1;
         }
-        for (var i = 0; i < ClientWeb.getClientNum(); i++){
+        for (var i = 0; i < ClientWeb.getClientNum(); i++){                 //Сброс клиентов
             var client = ClientWeb.getClients()[i];
             client.setVisited(false);
             client.setMoneyCount(0);
@@ -71,7 +71,7 @@ public class Specimen {
         return fitness;
     }
 
-    public static Specimen[] mutationOrCrossover(Specimen[] population){
+    public static Specimen[] mutationOrCrossover(Specimen[] population){    //Кроссинговер или мутация
         var res = new Specimen[population.length];
         var generator = new Random();
         for (var i = 0; i < population.length; i+=2){
@@ -81,11 +81,11 @@ public class Specimen {
             var newChromosomes4 = new String[spec1.chromosomes.length];
             for (var j = 0; j < spec1.chromosomes.length; j++){
                 var choose = generator.nextInt(100)+1;
-                if (choose < Main.crossoverPosibility){
+                if (choose < Main.crossoverPossibility){                    //Кроссинговер
                     var cut = generator.nextInt(spec1.chromosomes[j].length());
                     newChromosomes3[j] = spec1.chromosomes[j].substring(0, cut)+spec2.chromosomes[j].substring(cut);
                     newChromosomes4[j] = spec2.chromosomes[j].substring(0, cut)+spec1.chromosomes[j].substring(cut);
-                } else {
+                } else {                                                    //Мутация
                     var mutBit =  generator.nextInt(spec1.chromosomes[j].length());
                     newChromosomes3[j] = spec1.chromosomes[j].substring(0, mutBit)+
                             generator.nextInt(2)+spec1.chromosomes[j].substring(mutBit+1);
@@ -96,13 +96,13 @@ public class Specimen {
             }
             var spec3 = new Specimen(newChromosomes3, spec1.bitInGen);
             var spec4 = new Specimen(newChromosomes4, spec2.bitInGen);
-            res[i] = fixChromosome(spec3);
-            res[i+1] = fixChromosome(spec4);
+            res[i] = fixChromosome(spec3);                                  //Восстанавливаем путь, если после
+            res[i+1] = fixChromosome(spec4);                                //мут/кросс его не существует
         }
         return res;
     }
 
-    private static Integer[][] getIntChromosomes(Specimen specimen){
+    private static Integer[][] getIntChromosomes(Specimen specimen){        //Получаем хромосомы в винде int
         var chromosomes = specimen.getChromosomes();
         var intChromo = new Integer[Employee.employeeNum][];//[ClientWeb.getClientNum()*2];
         for (var j = 0; j < chromosomes.length; j++){
@@ -115,7 +115,7 @@ public class Specimen {
         return intChromo;
     }
 
-    private static Specimen fixChromosome(Specimen specimen){
+    private static Specimen fixChromosome(Specimen specimen){               //"чиним" хромосомы
         var intChromo = getIntChromosomes(specimen);
         for (var j = 0; j < intChromo.length; j++){
             for (var i = 0; i < intChromo[j].length-1; i++){
@@ -171,14 +171,14 @@ public class Specimen {
         return new Specimen(resChromos, specimen.bitInGen);
     }
 
-    private static List<Integer> getAvailableVertices(int vNum){
+    private static List<Integer> getAvailableVertices(int vNum){            //Возвращает список доступных путей для вершины
         var waysList = Arrays.stream(ClientWeb.getAvailableVertices()[vNum])
                 .filter((s) -> s != -1).boxed().collect(Collectors.toList());
         Collections.shuffle(waysList);
         return waysList;
     }
 
-    public static Specimen[] getRandomPopulation(int numOfSpec){
+    public static Specimen[] getRandomPopulation(int numOfSpec){            //Генерация случайной популяции
         var res = new Specimen[numOfSpec];
         for (var i = 0; i < numOfSpec; i++){
             var chromosomes = new Integer[Employee.employeeNum][ClientWeb.getClientNum()*2];//? *2 is optimal?
@@ -206,7 +206,7 @@ public class Specimen {
         return res;
     }
 
-    public static Specimen truncateSpecimen(Specimen specimen){
+    public static Specimen truncateSpecimen(Specimen specimen){             //Обрезаем лишнюю часть пути
         var fitness = getFitness(specimen);
         var intChromo = getIntChromosomes(specimen);
         var intChromo2 = new int[intChromo.length][];
@@ -260,8 +260,8 @@ public class Specimen {
 
     private static int getBitInGen(int maxNum){
         return (int)Math.ceil(Math.log(maxNum)/Math.log(2));
-    }
-    private static void normalizeArray(Integer[][] chromosomes){
+    }   //Сколько битов в гене
+    private static void normalizeArray(Integer[][] chromosomes){            //Гарантированно починить пути
         for (var j = 0; j < chromosomes.length; j++){
             for (var i = 0; i < chromosomes[j].length-1; i++){
                 if(ClientWeb.getTimesToOther()[chromosomes[j][i]][chromosomes[j][i+1]] == -1){

@@ -1,15 +1,13 @@
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class Employee {
-    public int money = 0;
-    public int start = -1;
-    public int end = -1;
-    public double multiplier = 1;
-    public static Employee[] list;
-    public static int employeeNum;
-    public static void Init(String path) throws IOException {
+    public int money = 0;                                                   //Деньги
+    public int start = -1;                                                  //Желаемая стартовая вершина
+    public int end = -1;                                                    //конечная
+    public double multiplier = 1;                                           //Множитель
+    public static Employee[] list;                                          //Список сотрудников
+    public static int employeeNum;                                          //Их число
+    public static void Init(String path) throws IOException {               //Инициализация
         var employeeContent = Main.getFileContent(path).replaceAll("\r\n", "").split(";");
         employeeNum = employeeContent.length;
         list = new Employee[employeeNum];

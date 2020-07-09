@@ -1,7 +1,7 @@
 import java.io.IOException;
 
 public class ClientWeb {
-    public static void Init(String path) throws IOException {
+    public static void Init(String path) throws IOException {               //Инициализация клиентов
         var clientsContent = Main.getFileContent(path)
                 .replaceAll("\r", "")
                 .replaceAll("\n", "")
@@ -31,10 +31,10 @@ public class ClientWeb {
             }
         }
     }
-    private static int[][] availableVertices;
-    private static int[][] timesToOther;
-    private static Client[] clients;
-    private static int clientNum;
+    private static int[][] availableVertices;                               //Есть ли путь из i в j или нет
+    private static int[][] timesToOther;                                    //Стоимость ребра между i и j
+    private static Client[] clients;                                        //Все клиенты
+    private static int clientNum;                                           //Число клиентов
 
     public static int[][] getAvailableVertices(){ return availableVertices; }
     public static int getClientNum(){

@@ -1,0 +1,5 @@
+5000; 		salary setting(def. 5000)
+3000;		break counter setting(def. 3000)
+80;		crossover possibility(def. 80)
+0.5;		employee multiplier add(def. 0.5)
+50;		population size(def. 50), even number

@@ -10,11 +10,15 @@ public class Main {
     private static String ClientsPath = "./Clients.txt";
     private static String EmployeesPath = "./Employees.txt";
     private static String ConfigPath = "./Config.txt";
+    private static String ClientsGraphPath = "./ClientsGraph.txt";
+    private static String GraphPath = "./graph.graphml";
     public static int salarySetting = 5000; //зарплата за клиента
     public static int breakCounterSetting = 3000; //если предыдущий результат лучше то убавляется на 1, иначе возвращается
     public static int crossoverPossibility = 80; //Вероятность кроссинговера, иначе - мутации.
     public static double employeeMultiplierAdd = 0.5;
     public static int populationSize = 50;
+    public static boolean htmlGraph = true;
+
     public static void main(String[] args) {
 
         var startTime = System.currentTimeMillis();
@@ -32,9 +36,13 @@ public class Main {
         System.out.print("Чтение клиентов - ");         //Чтение клиентов
 
         try{
-            ClientWeb.Init(ClientsPath);
+            if (htmlGraph)
+                ClientWeb.Init2(GraphPath, ClientsGraphPath);
+            else
+                ClientWeb.Init(ClientsPath);
         } catch (Exception e) {
             System.out.println("Ошибка чтения клиентов: "+e.getMessage());
+            e.printStackTrace();
             throw new Error();
         }
 
@@ -150,5 +158,6 @@ public class Main {
         crossoverPossibility = Integer.parseInt(config[2]);
         employeeMultiplierAdd = Double.parseDouble(config[3]);
         populationSize = Integer.parseInt(config[4]);
+        htmlGraph = config[5].equals("1");
     }
 }

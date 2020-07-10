@@ -22,7 +22,12 @@ public class Specimen {
         for(var k = 0; k < intChromo.length; k++){
             res.append("\nСотрудник_").append(k + 1).append(":");
             for (var l = 0; l < intChromo[k].length; l++){
-                res.append("----Клиент_").append(intChromo[k][l] + 1);
+                res.append("----Клиент_");
+                if (ClientWeb.getClients()[intChromo[k][l]].getEmployeeNum() == k){
+                    res.append("*");
+                    ClientWeb.getClients()[intChromo[k][l]].setEmployeeNum(-1);
+                }
+                res.append(intChromo[k][l] + 1);
             }
         }
         System.out.print(res.append("\n").append(addition).toString());
